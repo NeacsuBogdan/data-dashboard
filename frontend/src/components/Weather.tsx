@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { fetchWeatherData } from '../services/weatherService';
 import WeatherChart from './WeatherChart';
+import WeatherMap from './WeatherMap'; // Importăm WeatherMap
 import {
   Container,
   TextField,
@@ -9,7 +10,7 @@ import {
   Paper,
   Grid,
   Card,
-  CardContent
+  CardContent,
 } from '@mui/material';
 import Loader from './Loader'; // Importăm componenta Loader
 
@@ -19,39 +20,18 @@ const Weather: React.FC = () => {
   const [error, setError] = useState<string | null>(null); // Gestionarea erorilor
   const [loading, setLoading] = useState<boolean>(false); // Stare de încărcare
 
-  // Funcție pentru a salva datele în localStorage
-  const saveWeatherDataToCache = (city: string, data: any) => {
-    localStorage.setItem(`weather-${city}`, JSON.stringify(data));
-  };
-
-  // Funcție pentru a obține datele din localStorage
-  const getCachedWeatherData = (city: string) => {
-    const cachedData = localStorage.getItem(`weather-${city}`);
-    return cachedData ? JSON.parse(cachedData) : null;
-  };
-
   const fetchData = async () => {
     try {
-      setLoading(true); // Setăm loading true când începe cererea
+      setLoading(true);
       setError(null);
 
-      // Verificăm dacă datele sunt deja în cache
-      const cachedData = getCachedWeatherData(city);
-      if (cachedData) {
-        setWeatherData(cachedData); // Folosim datele din cache
-        setLoading(false); // Terminăm încărcarea
-        return; // Ieșim din funcție pentru a nu face cererea API
-      }
-
-      // Dacă nu sunt în cache, facem cererea API
       const data = await fetchWeatherData(city);
       setWeatherData(data);
-      saveWeatherDataToCache(city, data); // Salvăm datele în cache
-      setLoading(false); // Terminăm încărcarea
     } catch (err: any) {
       setError('Failed to fetch weather data. Please try again.');
       setWeatherData(null);
-      setLoading(false); // Terminăm încărcarea chiar și în caz de eroare
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -115,62 +95,65 @@ const Weather: React.FC = () => {
           </Grid>
         </form>
         {loading ? (
-          <Loader /> // Arată loader-ul când datele sunt în curs de încărcare
+          <Loader />
         ) : (
-        weatherData && weatherData.list && weatherData.city ? (
-          <>
-            <Paper elevation={3} style={{ padding: '1.5rem', marginTop: '2rem' }}>
-              <Typography variant="h5" color="primary" gutterBottom>
-                {weatherData.city.name}
-              </Typography>
-              <Typography variant="body1">
-                Temperature: {weatherData.list[0]?.main?.temp ?? 'N/A'}°C
-              </Typography>
-              <Typography variant="body2" color="textSecondary">
-                Description: {weatherData.list[0]?.weather[0]?.description ?? 'N/A'}
-              </Typography>
-            </Paper>
-            
+          weatherData && weatherData.list && weatherData.city && (
+            <>
+              <Paper elevation={3} style={{ padding: '1.5rem', marginTop: '2rem' }}>
+                <Typography variant="h5" color="primary" gutterBottom>
+                  {weatherData.city.name}
+                </Typography>
+                <Typography variant="body1">
+                  Temperature: {weatherData.list[0]?.main?.temp ?? 'N/A'}°C
+                </Typography>
+                <Typography variant="body2" color="textSecondary">
+                  Description: {weatherData.list[0]?.weather[0]?.description ?? 'N/A'}
+                </Typography>
+              </Paper>
 
-            <Paper elevation={3} style={{ padding: '1.5rem', marginTop: '2rem' }}>
-              <Typography variant="h6" color="primary" gutterBottom>
-                Weather Forecast (Next 24 Hours)
-              </Typography>
-              <WeatherChart data={prepareChartData(weatherData)} />
-            </Paper>
-            
-            <Paper elevation={3} style={{ padding: '1.5rem', marginTop: '2rem' }}>
-              <Typography variant="h6" color="primary" gutterBottom>
-                Daily Forecast
-              </Typography>
-              <Grid container spacing={2}>
-                {Object.entries(dailyData).map(([date, entries]) => (
-                  <Grid item xs={12} sm={6} md={4} key={date}>
-                    <Card>
-                      <CardContent>
-                        <Typography variant="subtitle1" color="primary">
-                          {date}
-                        </Typography>
-                        <Typography variant="body2">
-                          Avg Temp: {Math.round(entries.reduce((sum, e) => sum + e.main.temp, 0) / entries.length)}°C
-                        </Typography>
-                        <Typography variant="body2" color="textSecondary">
-                          Conditions: {entries[0]?.weather[0]?.description ?? 'N/A'}
-                        </Typography>
-                      </CardContent>
-                    </Card>
-                  </Grid>
-                ))}
-              </Grid>
-            </Paper>
-          </>
-        ) : (
-          weatherData && (
-            <Typography style={{ marginTop: '1rem', color: 'red' }}>
-              Data unavailable. Please try another city.
-            </Typography>
+              {/* Adăugăm componenta de hartă */}
+  <WeatherMap
+    latitude={weatherData.city.coord.lat}
+    longitude={weatherData.city.coord.lon}
+    cityName={weatherData.city.name}
+  />
+
+              <Paper elevation={3} style={{ padding: '1.5rem', marginTop: '2rem' }}>
+                <Typography variant="h6" color="primary" gutterBottom>
+                  Weather Forecast (Next 24 Hours)
+                </Typography>
+                <WeatherChart data={prepareChartData(weatherData)} />
+              </Paper>
+
+              <Paper elevation={3} style={{ padding: '1.5rem', marginTop: '2rem' }}>
+                <Typography variant="h6" color="primary" gutterBottom>
+                  Daily Forecast
+                </Typography>
+                <Grid container spacing={2}>
+                  {Object.entries(dailyData).map(([date, entries]) => (
+                    <Grid item xs={12} sm={6} md={4} key={date}>
+                      <Card>
+                        <CardContent>
+                          <Typography variant="subtitle1" color="primary">
+                            {date}
+                          </Typography>
+                          <Typography variant="body2">
+                            Avg Temp: {Math.round(
+                              entries.reduce((sum, e) => sum + e.main.temp, 0) / entries.length
+                            )}
+                            °C
+                          </Typography>
+                          <Typography variant="body2" color="textSecondary">
+                            Conditions: {entries[0]?.weather[0]?.description ?? 'N/A'}
+                          </Typography>
+                        </CardContent>
+                      </Card>
+                    </Grid>
+                  ))}
+                </Grid>
+              </Paper>
+            </>
           )
-        )
         )}
       </Paper>
     </Container>

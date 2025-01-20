@@ -1,14 +1,18 @@
 import axios from 'axios';
 
-const API_KEY = '118c30bcabbb0396ae747d1826f3be37'; // Înlocuiește cu cheia ta API
+const API_KEY = import.meta.env.VITE_WEATHER_API_KEY; // Accesăm cheia din variabilele de mediu
 const BASE_URL = 'https://api.openweathermap.org/data/2.5/forecast';
 
 export const fetchWeatherData = async (city: string) => {
+  if (!API_KEY) {
+    throw new Error('API Key is missing. Check your .env file.');
+  }
+
   try {
     const response = await axios.get(BASE_URL, {
       params: {
         q: city,
-        appid: API_KEY,
+        appid: API_KEY, // Utilizăm cheia API
         units: 'metric',
       },
     });
@@ -18,4 +22,3 @@ export const fetchWeatherData = async (city: string) => {
     throw error;
   }
 };
-
