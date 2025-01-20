@@ -1,0 +1,98 @@
+{
+  "hash": "b86dfb58",
+  "browserHash": "5d73621b",
+  "optimized": {
+    "react": {
+      "src": "../../node_modules/react/index.js",
+      "file": "react.js",
+      "fileHash": "41a94733",
+      "needsInterop": true
+    },
+    "react-dom": {
+      "src": "../../node_modules/react-dom/index.js",
+      "file": "react-dom.js",
+      "fileHash": "f0560a7a",
+      "needsInterop": true
+    },
+    "react/jsx-dev-runtime": {
+      "src": "../../node_modules/react/jsx-dev-runtime.js",
+      "file": "react_jsx-dev-runtime.js",
+      "fileHash": "feb16d79",
+      "needsInterop": true
+    },
+    "react/jsx-runtime": {
+      "src": "../../node_modules/react/jsx-runtime.js",
+      "file": "react_jsx-runtime.js",
+      "fileHash": "d95aac4e",
+      "needsInterop": true
+    },
+    "react-dom/client": {
+      "src": "../../node_modules/react-dom/client.js",
+      "file": "react-dom_client.js",
+      "fileHash": "d8623833",
+      "needsInterop": true
+    },
+    "@mui/material/styles": {
+      "src": "../../node_modules/@mui/material/styles/index.js",
+      "file": "@mui_material_styles.js",
+      "fileHash": "bf8f5241",
+      "needsInterop": false
+    },
+    "@mui/material/CssBaseline": {
+      "src": "../../node_modules/@mui/material/CssBaseline/index.js",
+      "file": "@mui_material_CssBaseline.js",
+      "fileHash": "746a3f55",
+      "needsInterop": false
+    },
+    "@mui/material": {
+      "src": "../../node_modules/@mui/material/index.js",
+      "file": "@mui_material.js",
+      "fileHash": "0c4775ef",
+      "needsInterop": false
+    },
+    "recharts": {
+      "src": "../../node_modules/recharts/es6/index.js",
+      "file": "recharts.js",
+      "fileHash": "a4d4aad4",
+      "needsInterop": false
+    },
+    "react-leaflet": {
+      "src": "../../node_modules/react-leaflet/lib/index.js",
+      "file": "react-leaflet.js",
+      "fileHash": "332d7940",
+      "needsInterop": false
+    },
+    "axios": {
+      "src": "../../node_modules/axios/index.js",
+      "file": "axios.js",
+      "fileHash": "749d2a31",
+      "needsInterop": false
+    }
+  },
+  "chunks": {
+    "chunk-YBWSRIPZ": {
+      "file": "chunk-YBWSRIPZ.js"
+    },
+    "chunk-C2ETWKEG": {
+      "file": "chunk-C2ETWKEG.js"
+    },
+    "chunk-SVCSPCZ7": {
+      "file": "chunk-SVCSPCZ7.js"
+    },
+    "chunk-Y4OZDULD": {
+      "file": "chunk-Y4OZDULD.js"
+    },
+    "chunk-QL2RUALA": {
+      "file": "chunk-QL2RUALA.js"
+    },
+    "chunk-H5NZP2BR": {
+      "file": "chunk-H5NZP2BR.js"
+    },
+    "chunk-UOIPVTYB": {
+      "file": "chunk-UOIPVTYB.js"
+    },
+    "chunk-AUZ3RYOM": {
+      "file": "chunk-AUZ3RYOM.js"
+    }
+  }
+}
